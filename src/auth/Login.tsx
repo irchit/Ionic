@@ -54,7 +54,7 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
         {authenticationError && (
           <div>{authenticationError.message || 'Failed to authenticate'}</div>
         )}
-        <IonButton onClick={handleLogin}>Login</IonButton>
+        <IonButton onClick={handleLogin}>Login 👀</IonButton>
       </IonContent>
     </IonPage>
   );

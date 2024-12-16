@@ -26,7 +26,7 @@ import { getLogger } from '../core';
 import { ItemContext } from './ItemProvider';
 import { NetworkState } from '../pages/NetworkState';
 import { AuthContext } from '../auth/AuthProvider';
-import ItemProps from './ItemProps'; // Importing the Item interface
+import ItemProps from './ItemProps'; 
 
 const log = getLogger('ItemList');
 const itemsPerPage = 15;
@@ -92,7 +92,7 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Item List</IonTitle>
+          <IonTitle>Comic List of Current Store</IonTitle>
           <NetworkState />
           <IonButtons slot="end">
             <IonButton onClick={handleLogout}>Logout</IonButton>
@@ -104,7 +104,7 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
 
         {/* Search and Filter Inputs */}
         <IonItem>
-          <IonLabel>Search Name</IonLabel>
+          <IonLabel style={{ padding: '1vw' }}>Search Name</IonLabel>
           <IonInput
             value={searchTerm}
             placeholder="Enter name"
@@ -113,7 +113,7 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
           />
         </IonItem>
         <IonItem>
-          <IonLabel>Max Issue</IonLabel>
+          <IonLabel style={{ padding: '1vw' }}>Max Issue</IonLabel>
           <IonInput
             type="number"
             value={maxIssue}
@@ -132,7 +132,7 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
                 issue={issue}
                 release_date={release_date}
                 in_stock={in_stock}
-                onEdit={(id) => history.push(`/item/${id}`)}
+                onEdit={(id) => history.push("/item/" + `${id}`)}
               />
             ))}
           </IonList>
