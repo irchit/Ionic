@@ -1,76 +1,59 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonLoading, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-/* Ionic CSS */
+/* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
+
+/* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
+
+/* Optional CSS utils that can be commented out */
 import '@ionic/react/css/padding.css';
 import '@ionic/react/css/float-elements.css';
 import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* import '@ionic/react/css/palettes/dark.always.css'; */
+/* import '@ionic/react/css/palettes/dark.class.css'; */
 import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-
-import ComicList from './pages/comics/ComicList';
-import ComicDetail from './pages/comics/ComicDetail';
-import ComicForm from './pages/comics/ComicForm';
-import { Storage } from '@ionic/storage';
-import { useEffect, useState } from 'react';
-import LoginPage from './pages/login/LoginPage';
-
-const storage = new Storage();
-await storage.create();
+import { AuthProvider, Login, PrivateRoute } from './auth';
+import { ItemProvider } from './todo/ItemProvider';
+import ItemList from './todo/ItemList';
+import ItemEdit from './todo/ItemEdit';
 
 setupIonicReact();
 
-const App: React.FC = () => {
-  const [authChecked, setAuthChecked] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const token = await storage.get('token');
-      if (token) {
-        // Optionally, verify token or just trust it for now
-        setAuthenticated(true);
-      }
-      setAuthChecked(true);
-    })();
-  }, []);
-
-  if (!authChecked) {
-    return <IonLoading isOpen={true} message={"Checking authentication..."} />;
-  }
-
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          {authenticated ? (
-            <>
-              <Route path="/comics" component={ComicList} exact />
-              <Route path="/comic/:id" component={ComicDetail} exact />
-              <Route path="/comic/:id/edit" component={ComicForm} exact />
-              <Route exact path="/" render={() => <Redirect to="/comics" />} />
-            </>
-          ) : (
-            <>
-              <Route path="/login" component={LoginPage} exact />
-              <Route exact path="/" render={() => <Redirect to="/login" />} />
-            </>
-          )}
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
-  );
-};
-
+const App: React.FC = () => (
+  <IonApp>
+    <IonReactRouter>
+      <IonRouterOutlet>
+        <AuthProvider>
+          <Route path="/login" component={Login} exact={true}/>
+          <ItemProvider>
+            <PrivateRoute path="/items" component={ItemList} exact={true}/>
+            <PrivateRoute path="/item" component={ItemEdit} exact={true}/>
+            <PrivateRoute path="/item/:id" component={ItemEdit} exact={true}/>
+          </ItemProvider>
+          <Route exact path="/" render={() => <Redirect to="/items"/>}/>
+        </AuthProvider>
+      </IonRouterOutlet>
+    </IonReactRouter>
+  </IonApp>
+);
 
 export default App;
