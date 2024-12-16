@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonLabel, IonInput, IonButton, IonCheckbox } from '@ionic/react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useNetworkStatus } from '../../hooks/useNetworkStatus';
+
+const { connected } = useNetworkStatus();
+
 
 interface Comic {
   id: number;
